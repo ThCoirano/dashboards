@@ -17,10 +17,10 @@ def carregar_csv(caminho: str) -> pd.DataFrame:
     
 
 # ==============================
-# Resumo Geral
+# Visão Geral
 # ==============================
 def mostrar_resumo_geral(df: pd.DataFrame):
-    st.subheader("📌 Resumo Geral")
+    st.subheader("📌 Visão Geral do Negócio")
 
     total_clientes = df["qtd_clientes"].sum() if "qtd_clientes" in df else 0
     gmv_medio_geral = df["gmv_medio_cliente"].mean() if "gmv_medio_cliente" in df else 0
@@ -28,17 +28,17 @@ def mostrar_resumo_geral(df: pd.DataFrame):
     pct_retorno_medio = df["pct_retorno"].mean() if "pct_retorno" in df else 0
 
     col1, col2, col3, col4 = st.columns(4)
-    col1.metric("Total de Clientes", f"{int(total_clientes):,}".replace(",", "."))
-    col2.metric("GMV Médio Geral", f"R${gmv_medio_geral:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."))
-    col3.metric("Passagens Média Geral", f"{passagens_media:.2f}")
-    col4.metric("% Retorno Médio", f"{pct_retorno_medio*100:.1f}%")
+    col1.metric("Base Ativa de Clientes", f"{int(total_clientes):,}".replace(",", "."))
+    col2.metric("GMV Médio por Cliente", f"R${gmv_medio_geral:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."))
+    col3.metric("Passagens por Cliente", f"{passagens_media:.2f}")
+    col4.metric("Taxa Média de Retorno", f"{pct_retorno_medio*100:.1f}%")
 
 
 # ==============================
-# Legenda dos Clusters
+# Perfis de Clientes
 # ==============================
 def mostrar_legenda_clusters():
-    st.subheader("📖 Legenda dos Clusters")
+    st.subheader("📖 Perfis de Clientes (Clusters)")
 
     clusters = {
         0: "Compras intermediárias, frequência moderada, só ida",
@@ -79,10 +79,10 @@ def mostrar_legenda_clusters():
 
 
 # ==============================
-# Tabela Perfil Cluster
+# Detalhamento de Clusters
 # ==============================
 def mostrar_tabela_base_perfil_cluster(caminho_csv: str):
-    st.header("📊 Tabela Base Perfil Cluster")
+    st.header("📊 Detalhamento de Clusters")
     df = carregar_csv(caminho_csv)
     df = df.reset_index(drop=True)
 
@@ -108,10 +108,10 @@ def mostrar_tabela_base_perfil_cluster(caminho_csv: str):
 
 
 # ==============================
-# Gráfico de Picos
+# Análise de Comportamento por Horário
 # ==============================
 def mostrar_picos_horarios(caminho_csv: str):
-    st.subheader("⏰ Análise de Picos de Horas por Cluster")
+    st.subheader("⏰ Análise de Comportamento por Horário")
 
     df = carregar_csv(caminho_csv)
     if df.empty:
@@ -126,7 +126,7 @@ def mostrar_picos_horarios(caminho_csv: str):
         y="compras",
         color="hora",
         barmode="group",
-        title="Compras por Hora e Cluster",
+        title="Distribuição de Compras por Horário",
         labels={"compras": "Nº Compras", "cluster": "Cluster", "hora": "Hora do Dia"}
     )
     st.plotly_chart(fig1, use_container_width=True)
@@ -136,7 +136,7 @@ def mostrar_picos_horarios(caminho_csv: str):
 # Ranking de Horários
 # ==============================
 def mostrar_rank_horarios(caminho_csv: str, top_n: int = 5):
-    st.subheader("🏆 Ranking de Horários por Cluster")
+    st.subheader("🏆 Top Horários de Engajamento")
 
     df = carregar_csv(caminho_csv)
     if df.empty:
@@ -158,10 +158,10 @@ def mostrar_rank_horarios(caminho_csv: str, top_n: int = 5):
 
 
 # ==============================
-# KPIs de Picos
+# KPIs de Alta Performance
 # ==============================
 def mostrar_kpis_picos(caminho_csv: str):
-    st.subheader("📊 KPIs de Picos de Horários")
+    st.subheader("📊 KPIs de Alta Performance")
 
     df = carregar_csv(caminho_csv)
     if df.empty:
@@ -179,15 +179,15 @@ def mostrar_kpis_picos(caminho_csv: str):
     cluster_score = df.groupby("cluster")["score"].mean().idxmax()
 
     col1, col2, col3, col4 = st.columns(4)
-    col1.metric("Cluster mais dependente de Heavy Users",
+    col1.metric("Cluster com Maior Dependência de Heavy Users",
         f"Cluster {cluster_heavy['cluster']} ({cluster_heavy['heavy_ratio']*100:.1f}%)")
-    col2.metric("Maior GMV em Pico",
+    col2.metric("Maior Potencial de Receita no Pico",
         f"R$ {cluster_gmv['gmv']:,.0f}".replace(",", "X").replace(".", ",").replace("X", "."),
         f"Cluster {cluster_gmv['cluster']} às {cluster_gmv['hora_fmt']}")
-    col3.metric("Maior nº Compras em Pico",
+    col3.metric("Maior Volume de Compras no Pico",
         f"{cluster_compras['compras']:,}".replace(",", "."),
         f"Cluster {cluster_compras['cluster']} às {cluster_compras['hora_fmt']}")
-    col4.metric("Maior Score Médio", f"Cluster {cluster_score}")
+    col4.metric("Cluster com Melhor Desempenho Relativo", f"Cluster {cluster_score}")
 
     resumo = df_pico[["cluster", "hora_fmt", "compras", "gmv", "heavy_ratio"]].copy()
     resumo = resumo.rename(columns={
@@ -201,58 +201,42 @@ def mostrar_kpis_picos(caminho_csv: str):
     resumo["% Heavy Users no Pico"] = resumo["% Heavy Users no Pico"].apply(lambda x: f"{x*100:.1f}%")
     resumo = resumo.reset_index(drop=True)
 
-    st.markdown("### 📌 Resumo por Cluster")
+    st.markdown("### 📌 Resumo Executivo por Cluster")
     st.table(resumo)
 
 
 # ==============================
-# Análise de Picos (com abas)
+# Recomendações Estratégicas
 # ==============================
-def mostrar_analise_picos(caminho_csv: str):
-    st.header("📊 Análise de Picos de Horários")
-
-    tab_resumo, tab_detalhe = st.tabs(["📌 Resumo", "🔎 Detalhe"])
-
-    with tab_resumo:
-        mostrar_kpis_picos(caminho_csv)
-
-    with tab_detalhe:
-        mostrar_picos_horarios(caminho_csv)
-        mostrar_rank_horarios(caminho_csv)
-
 def grafico_qtd_recomendacoes(df: pd.DataFrame):
-    st.subheader("📊 Recomendações de Tickets Por Cluster")
+    st.subheader("📊 Oportunidade de Tickets por Cluster")
 
-    # 1) Agrupar e ordenar
     resumo = (
         df.groupby("cluster", as_index=False)["potencial_bruto_tickets"]
           .sum()
           .sort_values("potencial_bruto_tickets", ascending=False)
     )
-
-    # 2) Converter para rótulo categórico
     resumo["cluster_lab"] = resumo["cluster"].apply(lambda x: f"Cluster {int(x)}")
 
-    # 3) Plot + ordem categórica fixa (do maior para o menor)
     fig = px.bar(
         resumo,
         x="cluster_lab",
         y="potencial_bruto_tickets",
         text="potencial_bruto_tickets",
-        title="Quantidade de Recomendações de Tickets por Cluster",
-        labels={"cluster_lab": "Cluster", "potencial_bruto_tickets": "Qtd de Recomendações"}
+        title="Oportunidade de Tickets por Cluster",
+        labels={"cluster_lab": "Cluster", "potencial_bruto_tickets": "Qtd de Tickets"}
     )
     fig.update_traces(textposition="outside")
     fig.update_xaxes(
         type="category",
         categoryorder="array",
-        categoryarray=resumo["cluster_lab"].tolist()  # mantém a ordem do DataFrame (já decrescente)
+        categoryarray=resumo["cluster_lab"].tolist()
     )
-
     st.plotly_chart(fig, use_container_width=True)
 
+
 def mostrar_recomendacoes(caminho_csv: str):
-    st.header("🎯 Recomendações - Produto Bruto")
+    st.header("🎯 Recomendações Estratégicas")
 
     df = carregar_csv(caminho_csv)
     if df.empty:
@@ -261,49 +245,23 @@ def mostrar_recomendacoes(caminho_csv: str):
     
     df = df.reset_index(drop=True)
 
-    # ==============================
-    # KPIs executivos
-    # ==============================
     total_recos = df["qtd_recomendacoes"].sum()
     total_tickets = df["potencial_ganho_tickets"].sum()
     total_ganho = df["potencial_ganho_reais_60"].sum()
 
     col1, col2, col3 = st.columns(3)
-    col1.metric("Total de Recomendações", f"{int(total_recos):,}".replace(",", "."))
-    col2.metric("Tickets Potenciais (60%)", f"{int(total_tickets):,}".replace(",", "."))
-    col3.metric("Receita Potencial (60%)", 
+    col1.metric("Volume de Recomendações", f"{int(total_recos):,}".replace(",", "."))
+    col2.metric("Oportunidade de Tickets (60%)", f"{int(total_tickets):,}".replace(",", "."))
+    col3.metric("Receita Incremental Potencial (60%)", 
         f"R$ {total_ganho:,.0f}".replace(",", "X").replace(".", ",").replace("X", "."))
 
     st.markdown("---")
-
-    # ==============================
-    # Gráfico - Recomendações por cluster
-    # ==============================
     grafico_qtd_recomendacoes(df)
 
-    # ==============================
-    # Gráfico - Top 10 clusters/horas por receita potencial
-    # ==============================
-    # top10 = df.sort_values("potencial_ganho_reais_60", ascending=False).head(10)
 
-    # fig = px.bar(
-    #     top10,
-    #     x="potencial_ganho_reais_60",
-    #     y=top10["cluster"].astype(str) + " - " + top10["hora"].astype(str) + "h",
-    #     orientation="h",
-    #     title="💰 Top 10 Clusters/Horas - Receita Potencial (60%)",
-    #     labels={
-    #         "potencial_ganho_reais_60": "Receita Potencial (R$)",
-    #         "y": "Cluster - Hora"
-    #     },
-    #     text_auto=".2s"
-    # )
-    # st.plotly_chart(fig, use_container_width=True)
-    
 def mostrar_detalhe_recomendacoes(caminho_csv: str):
-    st.subheader("🔎 Detalhe das Recomendações")
+    st.subheader("🔎 Análise Detalhada de Recomendações")
 
-    # Lê o CSV completo (mantém todas as colunas)
     df = carregar_csv(caminho_csv)
     if df.empty:
         st.warning("Nenhum dado encontrado no CSV de detalhes de recomendações.")
@@ -311,9 +269,6 @@ def mostrar_detalhe_recomendacoes(caminho_csv: str):
 
     df = df.reset_index(drop=True)
 
-    # ------------------------------
-    # Filtro de cluster
-    # ------------------------------
     if "cluster" not in df.columns:
         st.error("A coluna 'cluster' não existe no CSV de detalhe.")
         return
@@ -326,16 +281,9 @@ def mostrar_detalhe_recomendacoes(caminho_csv: str):
         st.info("Não há linhas para o cluster selecionado.")
         return
 
-    # ------------------------------
-    # Mostra tabela completa
-    # ------------------------------
     st.dataframe(df_filtrado, use_container_width=True)
-
     st.markdown("---")
 
-    # ------------------------------
-    # Gráfico de análise das viações recomendadas
-    # ------------------------------
     if "viacao_recomendada" in df_filtrado.columns and "oportunidade" in df_filtrado.columns:
         df_filtrado["oportunidade"] = pd.to_numeric(df_filtrado["oportunidade"], errors="coerce")
         df_grafico = df_filtrado.groupby("viacao_recomendada", as_index=False)["oportunidade"].sum()
@@ -345,8 +293,8 @@ def mostrar_detalhe_recomendacoes(caminho_csv: str):
             x="viacao_recomendada",
             y="oportunidade",
             text="oportunidade",
-            title=f"🚍 Oportunidade por Viação Recomendada - Cluster {cluster_sel}",
-            labels={"viacao_recomendada": "Viação", "oportunidade": "Oportunidade (R$)"}
+            title=f"🚍 Receita Potencial por Parceiro (Viação) - Cluster {cluster_sel}",
+            labels={"viacao_recomendada": "Viação", "oportunidade": "Receita Potencial (R$)"}
         )
         fig.update_traces(textposition="outside")
         st.plotly_chart(fig, use_container_width=True)
@@ -356,20 +304,14 @@ def mostrar_detalhe_recomendacoes(caminho_csv: str):
 # Main
 # ==============================
 def main():
-    st.set_page_config(page_title="Dashboard ClickBus", layout="wide")
-    st.title("Painel Estratégico - ClickBus")
+    st.set_page_config(page_title="Painel Executivo de Clusters e Oportunidades - ClickBus", layout="wide")
+    st.title("Painel Executivo de Clusters e Oportunidades - ClickBus")
 
-    # ==============================
-    # Caminhos dos CSVs
-    # ==============================
     base_csv = Path("clickbus_ml_project/data/base_perfil_cluster.csv")
     picos_csv = Path("clickbus_ml_project/data/picos_horarios.csv")
     recos_csv = Path("clickbus_ml_project/data/top_vendas_por_hora_conversao_60.csv")
     detalhe_recos_csv = Path("clickbus_ml_project/data/detalhe_recomendacao.csv")
 
-    # ==============================
-    # Perfil de Cluster
-    # ==============================
     if base_csv.exists():
         df_base = carregar_csv(base_csv)
         if not df_base.empty:
@@ -379,19 +321,14 @@ def main():
     else:
         st.warning("CSV base_perfil_cluster.csv não encontrado.")
 
-    # ==============================
-    # Análise de Picos de Horários
-    # ==============================
     if picos_csv.exists():
-        mostrar_analise_picos(picos_csv)
+        mostrar_kpis_picos(picos_csv)
+        mostrar_picos_horarios(picos_csv)
+        mostrar_rank_horarios(picos_csv)
     else:
         st.warning("CSV picos_horarios.csv não encontrado.")
 
-    # ==============================
-    # Recomendações (Resumo + Detalhe)
-    # ==============================
     if recos_csv.exists():
-        st.header("🎯 Recomendações - Produto Bruto")
         mostrar_recomendacoes(recos_csv)
 
     if detalhe_recos_csv.exists():
