@@ -362,10 +362,10 @@ def main():
     # ==============================
     # Caminhos dos CSVs
     # ==============================
-    base_csv = Path("./data/base_perfil_cluster.csv")
-    picos_csv = Path("./data/picos_horarios.csv")
-    recos_csv = Path("./data/top_vendas_por_hora_conversao_60.csv")
-    detalhe_recos_csv = Path("./data/detalhe_recomendacao.csv")
+    base_csv = Path("clickbus_ml_project/data/base_perfil_cluster.csv")
+    picos_csv = Path("clickbus_ml_project/data/picos_horarios.csv")
+    recos_csv = Path("clickbus_ml_project/data/top_vendas_por_hora_conversao_60.csv")
+    detalhe_recos_csv = Path("clickbus_ml_project/data/detalhe_recomendacao.csv")
 
     # ==============================
     # Perfil de Cluster
