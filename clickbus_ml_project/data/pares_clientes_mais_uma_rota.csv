@@ -1,0 +1,21 @@
+rota_origem;rota_relacionada;qtd_clientes;pct_associacao
+Fortaleza → Salvador;Salvador → Fortaleza;17112;32.7
+Fortaleza → Manaus;Manaus → Fortaleza;11038;23.4
+Fortaleza → Porto Alegre;Porto Alegre → Fortaleza;10661;25.1
+Curitiba → Salvador;Salvador → Curitiba;10632;26.0
+Manaus → Salvador;Salvador → Manaus;9684;32.3
+Porto Alegre → Salvador;Salvador → Porto Alegre;5765;33.7
+Rio de Janeiro → Salvador;Salvador → Rio de Janeiro;5655;41.3
+Belo Horizonte → Salvador;Salvador → Belo Horizonte;5654;20.5
+Curitiba → Manaus;Manaus → Curitiba;5535;20.4
+Curitiba → Fortaleza;Fortaleza → Curitiba;5456;19.5
+Manaus → Rio de Janeiro;Rio de Janeiro → Manaus;4897;32.1
+Curitiba → Rio de Janeiro;Rio de Janeiro → Curitiba;4815;21.9
+Manaus → Porto Alegre;Porto Alegre → Manaus;4800;24.8
+Curitiba → Porto Alegre;Porto Alegre → Curitiba;4609;18.1
+Fortaleza → Rio de Janeiro;Rio de Janeiro → Fortaleza;3625;20.2
+Belo Horizonte → Fortaleza;Fortaleza → Belo Horizonte;3620;16.0
+Fortaleza → Recife;Recife → Fortaleza;3537;20.8
+Belo Horizonte → Manaus;Manaus → Belo Horizonte;3502;16.3
+Fortaleza → São Paulo;São Paulo → Fortaleza;3495;23.9
+Recife → Salvador;Salvador → Recife;3440;35.3

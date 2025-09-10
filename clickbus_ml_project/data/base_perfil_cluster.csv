@@ -1,0 +1,9 @@
+﻿cluster;qtd_clientes;gmv_medio_cliente;gmv_mediano_cliente;passagens_media;pct_retorno;perfil_textual
+0;123380;117.7;91.21;1.23;0;Compras intermediárias, frequência moderada, só ida
+1;92397;149.37;123.22;1.29;0.01;Compras intermediárias, alta frequência, só ida
+2;63961;153.21;111.05;1.51;0.23;Compras altas, muitas passagens, só ida
+3;74112;268.66;226.3;1.44;0;Compras baixas, frequência moderada, só ida
+4;156536;121.06;94.38;1.23;0;Compras altas, muitas passagens, só ida
+5;5329;1173.91;1068.49;3.63;0.46;Compras altas, muitas passagens, só ida
+6;41526;371.96;319.1;2.4;0.66;Compras intermediárias, alta frequência, ida e volta
+7;24576;478.43;446.74;1.43;0.03;Compras intermediárias, frequência moderada, só ida
