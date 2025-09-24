@@ -9,7 +9,7 @@ import plotly.express as px
 # ==============================
 def carregar_csv(caminho: str) -> pd.DataFrame:
     try:
-        df = pd.read_csv(caminho, delimiter=';', encoding='utf-8-sig')
+        df = pd.read_csv(caminho, delimiter=';', encoding='utf-8')
         return df
     except Exception as e:
         st.error(f"Erro ao carregar CSV: {e}")
